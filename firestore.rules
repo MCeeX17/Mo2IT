@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+    function owns(uid) { return signedIn() && request.auth.uid == uid; }
+    function str(v, max) { return v is string && v.size() <= max; }
+
+    // Admins are added by hand in the Firebase console. Nobody can add one from the website.
+    match /admins/{uid} { allow get: if owns(uid); allow write: if false; }
+
+    match /profiles/{uid} {
+      allow read: if owns(uid) || isAdmin();
+      allow create, update: if owns(uid)
+        && request.resource.data.keys().hasOnly(['name','phone','company','email','updatedAt'])
+        && str(request.resource.data.name, 100) && str(request.resource.data.phone, 20)
+        && str(request.resource.data.company, 100)
+        && request.resource.data.email == request.auth.token.email;
+    }
+
+    match /requests/{id} {
+      allow create: if request.resource.data.keys().hasOnly(
+          ['name','phone','email','message','kind','type','services','estimate','date','uid','status','createdAt'])
+        && request.resource.data.keys().hasAll(['name','phone','email','message','kind','type','uid','status','createdAt'])
+        && str(request.resource.data.name, 100) && str(request.resource.data.phone, 20)
+        && str(request.resource.data.email, 150) && str(request.resource.data.message, 3000)
+        && str(request.resource.data.type, 200) && str(request.resource.data.estimate, 100)
+        && str(request.resource.data.date, 10)
+        && request.resource.data.services is list && request.resource.data.services.size() <= 20
+        && request.resource.data.kind in ['quote','contact']
+        && request.resource.data.status == 'new'
+        && request.resource.data.createdAt == request.time
+        && (request.resource.data.uid == null || owns(request.resource.data.uid));
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow update: if isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+        && request.resource.data.status in ['new','in progress','done'];
+      allow delete: if isAdmin();
+    }
+
+    match /threads/{uid} {
+      allow read: if owns(uid) || isAdmin();
+      allow create, update: if (owns(uid) || isAdmin())
+        && request.resource.data.keys().hasOnly(['name','email','phone','lastMessage','unread','updatedAt'])
+        && str(request.resource.data.lastMessage, 120)
+        && str(request.resource.data.get('name',''), 150)
+        && str(request.resource.data.get('phone',''), 20)
+        && (isAdmin() || request.resource.data.get('email','') == request.auth.token.email);
+
+      match /messages/{id} {
+        allow read: if owns(uid) || isAdmin();
+        allow create: if request.resource.data.keys().hasOnly(['text','from','createdAt'])
+          && str(request.resource.data.text, 2000) && request.resource.data.text.size() > 0
+          && request.resource.data.createdAt == request.time
+          && ((owns(uid) && request.resource.data.from == 'client')
+              || (isAdmin() && request.resource.data.from == 'admin'));
+      }
+    }
+  }
+}
