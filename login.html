@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Client login | Mo2IT</title>
+<meta name="description" content="Sign in or create your Mo2IT client profile.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="login">
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main">
+<section class="pagehead"><canvas class="net" aria-hidden="true"></canvas><div class="wrap"><h1>Client profile</h1><p>Sign in to message our team and follow your requests.</p></div></section>
+<section><div class="wrap auth"><aside><img class="plate" src="assets/logo-navy.jpg" alt="Mo2IT Technologies, innovative solutions" width="1033" height="490"><ul><li>Message the team directly</li><li>See the requests you send</li><li>Keep your contact details up to date</li></ul></aside><div class="panel">
+  <p class="notice" id="offline" hidden></p>
+  <button type="button" class="btn big wide" id="google">Continue with Google</button><p class="or">or use your email</p>
+  <div class="tabs"><button type="button" data-mode="login" aria-pressed="true">Sign in</button><button type="button" data-mode="register" aria-pressed="false">Create a profile</button></div>
+  <form method="post" id="auth">
+    <label data-reg hidden>Full name<input name="name" maxlength="100" autocomplete="name"></label>
+    <label data-reg hidden>Mobile number<input name="phone" type="tel" maxlength="20" autocomplete="tel"></label>
+    <label>Email<input name="email" type="email" required autocomplete="email"></label>
+    <label>Password<input name="password" type="password" required minlength="8" autocomplete="current-password"></label>
+    <label data-reg hidden class="check"><input type="checkbox" name="agree"> <span>I agree to the <a href="terms.html" target="_blank">terms</a> and <a href="privacy.html" target="_blank">privacy policy</a>.</span></label>
+    <button class="btn" type="submit">Sign in</button> <button class="link" type="button" id="reset">Forgot password?</button>
+    <p class="status" role="status"></p>
+  </form>
+</div></div></section>
+</main>
+<footer id="site-footer"></footer>
+<script type="module" src="js/site.js"></script>
+<script type="module" src="js/login.js"></script>
+</body>
+</html>

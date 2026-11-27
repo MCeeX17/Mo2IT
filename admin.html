@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin | Mo2IT</title>
+<meta name="description" content="Mo2IT administration.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="admin">
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main">
+<section class="pagehead"><canvas class="net" aria-hidden="true"></canvas><div class="wrap"><h1>Admin</h1><p>For the Mo2IT team.</p></div></section>
+<section><div class="wrap">
+  <div class="notice" id="offline" hidden></div>
+  <form method="post" id="admin-login" class="narrow" hidden><label>Admin email<input name="email" type="email" required autocomplete="username"></label><label>Password<input name="password" type="password" required autocomplete="current-password"></label><div class="row"><button class="btn">Sign in as admin</button><button type="button" class="btn line" id="admin-google">Use Google</button></div><p class="status" role="status"></p></form>
+  <div id="dash" hidden>
+    <div class="tabs"><button type="button" data-tab="overview" aria-pressed="true">Dashboard</button><button type="button" data-tab="inbox" aria-pressed="false">Inbox <span id="unread-count"></span></button><button type="button" data-tab="services" aria-pressed="false">Services and prices</button><button type="button" data-tab="promotions" aria-pressed="false">Promotions</button><button type="button" data-tab="projects" aria-pressed="false">Projects</button><button type="button" data-tab="mastery" aria-pressed="false">Mastery</button><button type="button" data-tab="faqs" aria-pressed="false">FAQ</button><button type="button" class="link" id="logout">Sign out</button></div>
+    <p class="status" id="dash-status" role="status"></p>
+    <div data-panel="overview"><div id="stats" data-live></div><h2>What people are asking for</h2><div id="demand" data-live></div><h2>Booked clients</h2><div id="bookings" data-live></div><h2>Client sign-ins</h2><div id="clients" data-live></div></div>
+    <div data-panel="inbox" hidden>
+      <div class="tabs"><button type="button" data-filter="all" aria-pressed="true">All</button><button type="button" data-filter="quote" aria-pressed="false">Quotes</button><button type="button" data-filter="contact" aria-pressed="false">Messages</button><button type="button" data-filter="chat" aria-pressed="false">Client chats</button></div>
+      <div class="split reverse"><div id="items" class="list" data-live></div><div>
+        <div id="detail" data-live><p class="hint">Select an item to read it.</p></div>
+        <div id="chatbox" hidden><h2 id="who"></h2><div class="chat" id="chat" data-live></div><form method="post" id="send" class="send"><label class="sr" for="text">Reply</label><textarea id="text" name="text" rows="2" required maxlength="2000" placeholder="Write a reply"></textarea><button class="btn">Send reply</button></form></div>
+      </div></div></div>
+    <div data-panel="services" hidden><div data-live></div></div><div data-panel="promotions" hidden><div data-live></div></div><div data-panel="projects" hidden><div data-live></div></div><div data-panel="mastery" hidden><div data-live></div></div><div data-panel="faqs" hidden><div data-live></div></div>
+  </div>
+</div></section>
+</main>
+<footer id="site-footer"></footer>
+<script type="module" src="js/site.js"></script>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>
